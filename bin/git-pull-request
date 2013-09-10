@@ -28,7 +28,7 @@ story_json = RestClient.get(
 story = JSON(story_json)
 
 tracking_branch = `git branch -vv | grep "*"`
-    .match(/^.*\[(\w+)[:\]].*/)
+    .match(/^.*\[([\w\.-]+)[:\]].*/)
     .captures[0]
 
 repo = `git remote -v | grep push`
