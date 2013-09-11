@@ -3,27 +3,41 @@
 #   TODO
 #
 #   * Support a more dynamic approach to Pivotal project ID, right 
-#   now the project ID is hard code to be Store Sytems
-#
-#   * Support creating a branch from an existing story by passing
-#   in just the story ID
+#     now the project ID is hard code to be Store Sytems
 
-require 'rest-client'
 require 'json'
+require 'optparse'
+require 'rest-client'
 
 def main
-  story_type = ARGV[0]
-  story_desc = ARGV[1]
+  options = parse_options ARGV, options
+  branch_desc = ARGV[0]
 
-  is_desc_a_story_id?(story_desc)
+  if options[:story].nil?
+    story = create_pivotal_story options[:type], branch_desc
+    options[:story] = story['id']
+  end
 
-  story = create_pivotal_story story_type, story_desc
-  create_feature_branch story_type, story['id'], story_desc
-  open_story_in_browser story['url']
+  create_feature_branch options[:type], options[:story], branch_desc
+  open_story_in_browser options[:story]
 end
 
-def is_desc_a_story_id?(desc)
-   true if Float(desc) rescue false
+def parse_options(args, options)
+  parser = OptionParser.new do |opts|
+    options = {}
+
+    opts.on("-s", "--story STORY_ID", "The Pivotal story to associate with the branch") do | story |
+      options[:story] = story
+    end
+
+    opts.on("-t", "--type STORY_TYPE", [:bug, :chore, :feature], 
+            "The type of Pivotal story to create") do | type |
+      options[:type] = type
+    end
+  end
+
+  parser.parse!(args)
+  options
 end
 
 def create_pivotal_story(type, name)
@@ -45,8 +59,8 @@ def create_feature_branch(type, story_id, desc)
   `git checkout -t -b #{type}/#{story_id}/#{desc}`
 end
 
-def open_story_in_browser(url)
-  `open #{url}`
+def open_story_in_browser(story_id)
+  `open https://www.pivotaltracker.com/story/show/#{story_id}`
 end
 
 main
