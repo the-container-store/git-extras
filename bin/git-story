@@ -43,7 +43,7 @@ end
 def determine_project_id(options)
   if options[:project].nil?
     git_root = `git rev-parse --show-toplevel`.chomp
-    return File.read "#{git_root}/.pivotal".chomp
+    return File.read("#{git_root}/.pivotal").chomp
   end
   options[:project]
 end
