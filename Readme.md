@@ -2,6 +2,31 @@
 
 Little git extras.
 
+## Requirements
+
+The TCS fork of Git Extras comes with a few addition requirements:
+
+- Ruby 2.0 is required from the Ruby-based scripts. These scripts also use the
+  `json` and `rest-client` gems.
+
+- For GitHub integration, you need an environment variable named `GITHUB_TOKEN`
+  whose value is a valid GitHub API token. To create one:
+    1. Go to **Account Setting** on GitHub
+    2. Go to the **Applications** section
+    3. Create a new *Personal Access Tokens*
+
+- For Pivotal Tracker integration, you need an environment variable named `PIVOTAL_TOKEN`
+  whose value is a valid Pivotal Tracker API token. This token in located at the bottom
+  of your **Profile** page.
+
+Also, in order for the `pull-request` command to successfully create a pull request, your
+local feature branch needs a tracking branch. If you are creating your feature branch by 
+hand, you can create a tracking branch via the `-t` switch:
+    
+    git checkout -t -b feature/123456/some-story
+
+The `git-bug`, `git-chore` and `git-feature` commands do this for you.
+
 ## Installation
 
 Clone / Tarball:
