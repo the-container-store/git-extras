@@ -1,15 +1,24 @@
 #!/bin/bash
 
-# For now, we are going to assume that the arguments will be
-# in the form:
-#
-# git-story -t [type] -s [story-id] [branch-desc]
-#
-# We can handle more sophisticated argument parsing later
+while getopts ":s:t:p:" opt; do
+  case $opt in
+    s)
+      STORY_ID=$OPTARG
+      ;;
+    t)
+      STORY_TYPE=$OPTARG
+      ;;
+    p)
+      PROJECT_ID=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
 
-STORY_TYPE=$2
-STORY_ID=$4
-BRANCH_DESC=$5
+shift $(( OPTIND - 1 ))
+BRANCH_DESC=$1
 
 git checkout -t -b $STORY_TYPE/$STORY_ID/$BRANCH_DESC
 
@@ -27,28 +36,6 @@ open https://www.pivotaltracker.com/story/show/$STORY_ID
 
 #   create_feature_branch options[:type], options[:story], branch_desc
 #   open_story_in_browser options[:story]
-# end
-
-# def parse_options(args, options)
-#   parser = OptionParser.new do |opts|
-#     options = {}
-
-#     opts.on("-s", "--story STORY_ID", "The Pivotal story to associate with the branch") do | story |
-#       options[:story] = story
-#     end
-
-#     opts.on("-t", "--type STORY_TYPE", [:bug, :chore, :feature], 
-#             "The type of Pivotal story to create") do | type |
-#       options[:type] = type
-#     end
-
-#     opts.on("-p", "--project PROJECT_ID", "The Pivotal project to associate with the branch") do | project |
-#       options[:project] = project
-#     end
-#   end
-
-#   parser.parse!(args)
-#   options
 # end
 
 # def determine_project_id(options)
