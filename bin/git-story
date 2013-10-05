@@ -24,38 +24,19 @@ if [ -z "$STORY_ID" ]; then
   if [ -z "$PROJECT_ID" ]; then
     GIT_ROOT=$(git rev-parse --show-toplevel)
     PROJECT_ID=$(cat $GIT_ROOT/.pivotal)
-    echo $PROJECT_ID
   fi
-  exit
+
+  RESPONSE=$(curl -s -X POST \
+       -H "Content-Type:application/json" \
+       -H "X-TrackerToken:$PIVOTAL_TOKEN" \
+       -d "{\"story_type\":\"$STORY_TYPE\",\"name\":\"$BRANCH_DESC\"}" \
+       "https://www.pivotaltracker.com/services/v5/projects/$PROJECT_ID/stories")
+  NEW_STORY_ID=$(echo $RESPONSE | sed 's/.*, "id"\: //g' | sed 's/,.*//g')
+  STORY_ID=$NEW_STORY_ID
 fi
 
 git checkout -t -b $STORY_TYPE/$STORY_ID/$BRANCH_DESC
 
-open https://www.pivotaltracker.com/story/show/$STORY_ID
-
-# def main
-#   if options[:story].nil?
-#     project_id = determine_project_id options
-#     story = create_pivotal_story project_id, options[:type], branch_desc
-#     options[:story] = story['id']
-#   end
-
-#   create_feature_branch options[:type], options[:story], branch_desc
-#   open_story_in_browser options[:story]
-# end
-
-# def create_pivotal_story(project_id, type, name)
-#   begin
-#     story_json = RestClient.post(
-#       "https://www.pivotaltracker.com/services/v5/projects/#{project_id}/stories",
-#       { 'story_type' => type, 'name' => name }.to_json,
-#       { 'X-TrackerToken' => ENV['PIVOTAL_TOKEN'], 'Content-Type' => 'application/json' })
-#     JSON(story_json)
-#   rescue => e
-#     puts "Failed to create Pivotal story:"
-#     puts e.response
-#     exit
-#   end
-# end
-
-# main
+if [ -n "$NEW_STORY_ID" ]; then
+  open https://www.pivotaltracker.com/story/show/$STORY_ID
+fi
