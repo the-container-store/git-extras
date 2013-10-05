@@ -8,15 +8,12 @@
 # We can handle more sophisticated argument parsing later
 
 STORY_TYPE=$2
-echo $STORY_TYPE
-
 STORY_ID=$4
-echo $STORY_ID
-
 BRANCH_DESC=$5
-echo $BRANCH_DESC
 
 git checkout -t -b $STORY_TYPE/$STORY_ID/$BRANCH_DESC
+
+open https://www.pivotaltracker.com/story/show/$STORY_ID
 
 # def main
 #   options = parse_options ARGV, options
@@ -74,10 +71,6 @@ git checkout -t -b $STORY_TYPE/$STORY_ID/$BRANCH_DESC
 #     puts e.response
 #     exit
 #   end
-# end
-
-# def open_story_in_browser(story_id)
-#   `open https://www.pivotaltracker.com/story/show/#{story_id}`
 # end
 
 # main
