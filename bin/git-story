@@ -1,8 +1,22 @@
-#!/usr/bin/env ruby
+#!/bin/bash
 
-# require 'json'
-# require 'optparse'
-# require 'rest-client'
+# For now, we are going to assume that the arguments will be
+# in the form:
+#
+# git-story -t [type] -s [story-id] [branch-desc]
+#
+# We can handle more sophisticated argument parsing later
+
+STORY_TYPE=$2
+echo $STORY_TYPE
+
+STORY_ID=$4
+echo $STORY_ID
+
+BRANCH_DESC=$5
+echo $BRANCH_DESC
+
+git checkout -t -b $STORY_TYPE/$STORY_ID/$BRANCH_DESC
 
 # def main
 #   options = parse_options ARGV, options
@@ -60,10 +74,6 @@
 #     puts e.response
 #     exit
 #   end
-# end
-
-# def create_feature_branch(type, story_id, desc)
-#   `git checkout -t -b #{type}/#{story_id}/#{desc}`
 # end
 
 # def open_story_in_browser(story_id)
