@@ -20,14 +20,20 @@ done
 shift $(( OPTIND - 1 ))
 BRANCH_DESC=$1
 
+if [ -z "$STORY_ID" ]; then
+  if [ -z "$PROJECT_ID" ]; then
+    GIT_ROOT=$(git rev-parse --show-toplevel)
+    PROJECT_ID=$(cat $GIT_ROOT/.pivotal)
+    echo $PROJECT_ID
+  fi
+  exit
+fi
+
 git checkout -t -b $STORY_TYPE/$STORY_ID/$BRANCH_DESC
 
 open https://www.pivotaltracker.com/story/show/$STORY_ID
 
 # def main
-#   options = parse_options ARGV, options
-#   branch_desc = ARGV[0]
-
 #   if options[:story].nil?
 #     project_id = determine_project_id options
 #     story = create_pivotal_story project_id, options[:type], branch_desc
@@ -36,14 +42,6 @@ open https://www.pivotaltracker.com/story/show/$STORY_ID
 
 #   create_feature_branch options[:type], options[:story], branch_desc
 #   open_story_in_browser options[:story]
-# end
-
-# def determine_project_id(options)
-#   if options[:project].nil?
-#     git_root = `git rev-parse --show-toplevel`.chomp
-#     return File.read("#{git_root}/.pivotal").chomp
-#   end
-#   options[:project]
 # end
 
 # def create_pivotal_story(project_id, type, name)
