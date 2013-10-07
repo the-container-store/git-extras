@@ -18,7 +18,7 @@
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 git push -f origin $CURRENT_BRANCH
 
-# story_id = current_branch.split('/')[1]
+STORY_ID=$(echo $CURRENT_BRANCH | cut -d "/" -f 2)
 # story_json = RestClient.get(
 #     "https://www.pivotaltracker.com/services/v5/stories/#{story_id}", 
 #     'X-TrackerToken' => ENV['PIVOTAL_TOKEN'])
