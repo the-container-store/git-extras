@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/bin/bash
 
 #   TODO
 #
@@ -15,11 +15,8 @@
 #   * Maybe look at making the '-f' option on the push command 
 #     optional
 
-# require 'rest-client'
-# require 'json'
-
-# current_branch = `git rev-parse --abbrev-ref HEAD`.chomp
-# `git push -f origin #{current_branch}`
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+git push -f origin $CURRENT_BRANCH
 
 # story_id = current_branch.split('/')[1]
 # story_json = RestClient.get(
