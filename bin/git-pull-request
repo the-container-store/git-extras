@@ -27,12 +27,14 @@ TRACKING_BRANCH=$(git branch -vv | \
                   sed 's/^.*\[//' | \
                   sed 's/\].*$//' | \
                   sed 's/:.*$//')
-echo $TRACKING_BRANCH
 
-# repo = `git remote -v | grep push`
-#     .split(/\s/)[1]
-#     .match(/^.*:(.*)\.git$/)
-#     .captures[0]
+REPO=$(git remote -v | \
+       grep push | \
+       cut -f 2 | \
+       cut -d " " -f 1 | \
+       sed 's/^.*\://' | \
+       sed 's/\.git$//')
+echo $REPO
 
 # pr_url="https://api.github.com/repos/#{repo}/pulls"
 # payload = { 'title' => "[##{story_id}] #{story['name']}",
