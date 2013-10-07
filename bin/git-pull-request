@@ -21,11 +21,13 @@ git push -f origin $CURRENT_BRANCH
 STORY_ID=$(echo $CURRENT_BRANCH | cut -d "/" -f 2)
 STORY_JSON=$(curl -s -H "X-TrackerToken:$PIVOTAL_TOKEN" \
                   https://www.pivotaltracker.com/services/v5/stories/$STORY_ID)
-echo $STORY_JSON
 
-# tracking_branch = `git branch -vv | grep "*"`
-#     .match(/^.*\[([\w\.-]+)[:\]].*/)
-#     .captures[0]
+TRACKING_BRANCH=$(git branch -vv | \
+                  grep "*" | \
+                  sed 's/^.*\[//' | \
+                  sed 's/\].*$//' | \
+                  sed 's/:.*$//')
+echo $TRACKING_BRANCH
 
 # repo = `git remote -v | grep push`
 #     .split(/\s/)[1]
