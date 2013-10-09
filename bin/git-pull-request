@@ -15,6 +15,7 @@
 #   * Maybe look at making the '-f' option on the push command 
 #     optional
 
+
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 git push -f origin $CURRENT_BRANCH
 
@@ -34,24 +35,17 @@ REPO=$(git remote -v | \
        cut -d " " -f 1 | \
        sed 's/^.*\://' | \
        sed 's/\.git$//')
-echo $REPO
 
-# pr_url="https://api.github.com/repos/#{repo}/pulls"
+PR_URL="https://api.github.com/repos/$REPO/pulls"
+
+echo $STORY_JSON
 # payload = { 'title' => "[##{story_id}] #{story['name']}",
 #             'body' => story['description'],
 #             'head' => "the-container-store:#{current_branch}",
 #             'base' => "the-container-store:#{tracking_branch}"}.to_json
 
-# github_token = ENV['GITHUB_TOKEN']
-# puts pr_url
-# puts payload
-# puts github_token
-# begin
 #   pull_request_json = RestClient.post pr_url, payload, 'Authorization' => "token #{github_token}"
 #   pull_request = JSON(pull_request_json)
 #   `open #{pull_request['html_url']}` # this will only work on Mac for now
 
-#   `git checkout #{current_branch}`
-# rescue Exception => e
-#     puts e.response
-# end
+# git checkout $TRACKING_BRANCH
