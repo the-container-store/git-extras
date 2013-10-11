@@ -36,15 +36,26 @@ REPO=$(git remote -v | \
        sed 's/^.*\://' | \
        sed 's/\.git$//')
 
-PR_URL="https://api.github.com/repos/$REPO/pulls"
+PR_URL=
 
-echo $STORY_JSON
+STORY_TITLE=$(echo $STORY_JSON | \
+            sed 's/.*, "name"\: "//g' | \
+            sed 's/", ".*//g' | \
+            sed 's/"/\\"/g')
+
+STORY_DESC=$(echo $STORY_JSON | \
+            sed 's/.*, "description"\: "//g' | \
+            sed 's/", ".*//g' | \
+            sed 's/"/\\"/g')
+
+PULL_REQUEST_JSON=$(curl -s -H "Authorization:$GITHUB_TOKEN" \
+                         https://api.github.com/repos/$REPO/pulls)
 # payload = { 'title' => "[##{story_id}] #{story['name']}",
 #             'body' => story['description'],
 #             'head' => "the-container-store:#{current_branch}",
 #             'base' => "the-container-store:#{tracking_branch}"}.to_json
 
-#   pull_request_json = RestClient.post pr_url, payload, 'Authorization' => "token #{github_token}"
+#   pull_request_json = RestClient.post pr_url, payload, '' => "token #{github_token}"
 #   pull_request = JSON(pull_request_json)
 #   `open #{pull_request['html_url']}` # this will only work on Mac for now
 
